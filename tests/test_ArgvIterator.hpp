@@ -10,4 +10,5 @@ TEST("ArgvIterator",
         ArgvIterator end(argv, argc, null_sentinel{});
 
         assert(*it == null_sentinel{});
-    })))
+        
+    }))
