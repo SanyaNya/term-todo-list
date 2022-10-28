@@ -43,6 +43,11 @@ public:
         return {cur, static_cast<size_t>(e.cur-cur)};
     }
 
+    void to_next_token() noexcept
+    {
+        cur = *(++argv);
+    }
+
     bool operator!=(const ArgvIterator& it) const noexcept
     {
         return cur != it.cur;
