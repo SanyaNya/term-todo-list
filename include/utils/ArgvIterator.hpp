@@ -15,6 +15,10 @@ class ArgvIterator
 
 public:
     using iterator_category = std::forward_iterator_tag;
+    using value_type = char;
+    using pointer = char*;
+    using reference = char&;
+    using difference_type = int;
 
     ArgvIterator(const char** argv_, int argc_) noexcept : 
         argv(argv_), cur(*argv)
