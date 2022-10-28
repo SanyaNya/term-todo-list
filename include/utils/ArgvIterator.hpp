@@ -21,14 +21,15 @@ public:
     using difference_type = int;
 
     ArgvIterator(const char** argv_, int argc_) noexcept : 
-        argv(argv_), cur(*argv)
+        argv(argv_)
     {
         if(argc_ != 0)
         {
+            cur = *argv;
             end = *(argv + (argc_ - 1));
             end = end + std::strlen(end); 
         }
-        else end = cur;
+        else cur = end = nullptr;
     }
 
     ArgvIterator(const char** argv_, int argc_, null_sentinel) noexcept :
