@@ -1,7 +1,7 @@
 TEST("TokenIterator",
     SUBTEST("Empty", []()
     {
-        std::array<const char*, 0> argv{};
+        const std::array<const char*, 0> argv{};
         auto[it, end] = token_iter_pair(argv);
         assert(it == end);
     }),
@@ -9,7 +9,7 @@ TEST("TokenIterator",
     SUBTEST("Word::Keyword", []()
     {
         size_t i = 0;
-        std::array argv = 
+        const std::array argv = 
         {
             "name", 
             "description", 
