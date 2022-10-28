@@ -23,8 +23,12 @@ public:
     ArgvIterator(const char** argv_, int argc_) noexcept : 
         argv(argv_), cur(*argv)
     {
-        end = *(argv + (argc_ - 1));
-        end = end + std::strlen(end); 
+        if(argc_ != 0)
+        {
+            end = *(argv + (argc_ - 1));
+            end = end + std::strlen(end); 
+        }
+        else end = cur;
     }
 
     ArgvIterator(const char** argv_, int argc_, null_sentinel) noexcept :
