@@ -76,5 +76,26 @@ TEST("TokenIterator",
         check_delim<Empty, Dspace>(++it, end);
         check_string(++it, end, "b");
         check_delim<Punctuation, Dquotes>(++it, end);
+    }),
+
+    SUBTEST("Delimiters", []()
+    {
+        const std::array argv{ "<>= \n\t\".-:" };
+        auto[it, end] = token_iter_pair(argv);
+
+        using namespace todolist::Tokenizer::Tokens;
+
+        check_delim<Compare, Dless>(it, end);
+        check_delim<Compare, Dgreater>(++it, end);
+        check_delim<Compare, Dequal>(++it, end);
+
+        check_delim<Empty, Dspace>(++it, end);
+        check_delim<Empty, Dnewline>(++it, end);
+        check_delim<Empty, Dtab>(++it, end);
+
+        check_delim<Punctuation, Dquotes>(++it, end);
+        check_delim<Punctuation, Ddot>(++it, end);
+        check_delim<Punctuation, Ddash>(++it, end);
+        check_delim<Punctuation, Dcolon>(++it, end);
     })
 )
