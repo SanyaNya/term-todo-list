@@ -9,11 +9,11 @@ namespace todolist::Tokenizer::Tokens
 
 struct Number
 {
-    int value;
+    unsigned value;
 
     static std::optional<Number> match(std::string_view word)
     {
-        int val;
+        unsigned val;
         const auto [ptr, err] = 
             std::from_chars(word.begin(), word.end(), val);
 
