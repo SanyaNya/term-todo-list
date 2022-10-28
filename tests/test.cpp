@@ -3,14 +3,14 @@
 #include <array>
 #include <vector>
 #include <cassert>
-#include "utils/ArgvIterator.hpp"
+#include "cases/includes.hpp"
 
 #define TEST(NAME, ...) std::pair{ std::string(NAME), std::vector{ __VA_ARGS__ } },
 #define SUBTEST(NAME, ...) std::pair<std::string, std::function<void()>>{NAME, __VA_ARGS__}
 
 std::array tests
 {
-#include "test_ArgvIterator.hpp"
+#include "cases/tests.hpp"
 };
 
 int main()
