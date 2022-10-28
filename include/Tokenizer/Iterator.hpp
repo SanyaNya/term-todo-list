@@ -26,6 +26,10 @@ class Iterator
 
 public:
     using iterator_category = std::input_iterator_tag;
+    using value_type = Token;
+    using pointer = Token*;
+    using reference = Token&;
+    using difference_type = int;
 
     Iterator(It it) noexcept : 
         cur_word(it), next_delim(find_next_delim()) {}
