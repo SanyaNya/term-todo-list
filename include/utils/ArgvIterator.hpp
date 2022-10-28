@@ -64,7 +64,8 @@ public:
 
     char operator*() const noexcept
     {
-        if(*cur == null_sentinel{} && cur != end) return ' ';
+        if(cur == end) return null_sentinel{};
+        else if(*cur == null_sentinel{} && cur != end) return ' ';
         
         return *cur;
     }
