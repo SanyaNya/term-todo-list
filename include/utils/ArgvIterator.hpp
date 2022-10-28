@@ -9,7 +9,7 @@ namespace todolist::utils
 
 class ArgvIterator
 {
-    const char** argv;
+    const char* const* argv;
     const char* cur;
     const char* end;
 
@@ -20,7 +20,7 @@ public:
     using reference = char&;
     using difference_type = int;
 
-    ArgvIterator(const char** argv_, int argc_) noexcept : 
+    ArgvIterator(const char* const* argv_, int argc_) noexcept : 
         argv(argv_)
     {
         if(argc_ != 0)
@@ -32,7 +32,7 @@ public:
         else cur = end = nullptr;
     }
 
-    ArgvIterator(const char** argv_, int argc_, null_sentinel) noexcept :
+    ArgvIterator(const char* const* argv_, int argc_, null_sentinel) noexcept :
         ArgvIterator(argv_, argc_) 
     {
         cur = end;
