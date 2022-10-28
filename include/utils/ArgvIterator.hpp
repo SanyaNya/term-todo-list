@@ -29,12 +29,17 @@ public:
         cur = end;
     }
 
-    operator const char*() const noexcept
+    std::string_view token() const noexcept
     {
         return cur;
     }
 
-    bool operator!=(ArgvIterator& it) const noexcept
+    std::string_view token(const ArgvIterator& e) const noexcept
+    {
+        return {cur, static_cast<size_t>(e.cur-cur)};
+    }
+
+    bool operator!=(const ArgvIterator& it) const noexcept
     {
         return cur != it.cur;
     }
@@ -42,6 +47,16 @@ public:
     bool operator!=(null_sentinel) const noexcept
     {
         return *cur != null_sentinel{};
+    }
+
+    bool operator==(const ArgvIterator& it) const noexcept
+    {
+        return cur == it.cur;
+    }
+
+    bool operator==(null_sentinel) const noexcept
+    {
+        return *cur == null_sentinel{};
     }
 
     char operator*() const noexcept

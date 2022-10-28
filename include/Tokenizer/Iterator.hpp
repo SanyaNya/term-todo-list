@@ -37,13 +37,9 @@ public:
 
     Token operator*() const noexcept
     {
-        const char* begin = static_cast<const char*>(cur_word);
-        const char* end = static_cast<const char*>(next_delim);
-
         if(cur_word != next_delim) 
             return match<Tokens::Word>(
-                    std::string_view{
-                        begin, size_t(end-begin)}).value();
+                    cur_word.token(next_delim)).value();
         else
             return match<Tokens::Delimiter>(*cur_word).value();
     }
