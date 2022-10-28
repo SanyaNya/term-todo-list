@@ -39,6 +39,11 @@ public:
         return cur_word != it.cur_word;
     }
 
+    bool operator==(Iterator it) const noexcept
+    {
+        return cur_word == it.cur_word;
+    }
+
     Token operator*() const noexcept
     {
         if(cur_word != next_delim) 
