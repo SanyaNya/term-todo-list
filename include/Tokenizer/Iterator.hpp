@@ -50,8 +50,12 @@ public:
 
     Iterator& operator++() noexcept
     {
-        cur_word = next_delim;
-        next_delim = find_next_delim();
+        if(cur_word == next_delim)
+        {
+            ++cur_word;
+            next_delim = find_next_delim();
+        }
+        else cur_word = next_delim;
 
         return *this;
     }
