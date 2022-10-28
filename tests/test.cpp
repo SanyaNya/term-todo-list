@@ -5,7 +5,7 @@
 #include "utils/ArgvIterator.hpp"
 
 #define TEST(NAME, ...) std::pair{ std::string(NAME), std::array{ __VA_ARGS__ } }
-#define SUBTEST(NAME, FUNC) std::pair<std::string, std::function<void()>>{NAME, FUNC}
+#define SUBTEST(NAME, ...) std::pair<std::string, std::function<void()>>{NAME, __VA_ARGS__}
 
 std::array tests
 {
