@@ -24,7 +24,7 @@ struct Matcher
         if constexpr(utils::is_named_v<T>)
             return T::name == word ? std::optional<T>{T{}} : std::nullopt;
 
-        if constexpr(utils::is_matchable_v<T>)
+        if constexpr(utils::is_matchable_v<T, RawToken>)
             return T::match(word);
     }
 };
