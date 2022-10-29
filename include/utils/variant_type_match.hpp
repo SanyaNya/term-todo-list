@@ -20,7 +20,7 @@ inline std::optional<Variant> variant_type_match(Predicate p = Predicate())
             Predicate*>,
         "Predicate must return std::optional and have no args");
 
-    if(auto opt = p.template operator()<T>(); opt) 
+    if(auto opt = p.template operator()<T>()) 
         return opt;
     
     if constexpr(I+1 != std::variant_size_v<Variant>)
