@@ -64,6 +64,13 @@ public:
 
         return *this;
     }
+
+    Iterator operator++(int) noexcept
+    {
+        Iterator it = *this;
+        ++(*this);
+        return it;
+    }
 };
 
 } //namespace todolist::Tokenizer
