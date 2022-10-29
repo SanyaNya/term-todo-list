@@ -6,6 +6,9 @@
 namespace todolist::utils
 {
 
+namespace detail
+{
+
 template<typename Path>
 struct dfs_get_h {};
 
@@ -30,6 +33,8 @@ struct dfs_get_h<std::tuple<>>
     }
 };
 
+} //namespace detail
+
 template<typename T, typename V>
 inline T dfs_get(V&& v)
 {
@@ -37,7 +42,7 @@ inline T dfs_get(V&& v)
 
     static_assert(!std::is_same_v<Path, void>, "V does not have T");
 
-    return dfs_get_h<Path>::f(std::forward<V>(v));
+    return detail::dfs_get_h<Path>::f(std::forward<V>(v));
 }
 
 } //namespace todolist::utils
