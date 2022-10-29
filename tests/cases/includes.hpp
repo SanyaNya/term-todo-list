@@ -3,22 +3,7 @@
 #include <cassert>
 #include <utility>
 #include <array>
-#include "utils/ArgvIterator.hpp"
-#include "Tokenizer/Iterator.hpp"
-
-template<size_t SIZE>
-inline auto token_iter_pair(const std::array<const char*, SIZE>& argv)
-{
-    using namespace todolist;
-
-    utils::ArgvIterator argv_begin(std::data(argv), argv.size());
-    utils::ArgvIterator argv_end(std::data(argv), argv.size(), utils::null_sentinel{});
-
-    Tokenizer::Iterator<utils::ArgvIterator> it(argv_begin);
-    Tokenizer::Iterator<utils::ArgvIterator> end(argv_end);
-
-    return std::make_pair(it, end);
-}
+#include "Tokenizer/iter_pair.hpp"
 
 template<typename It>
 inline void check_keyword(It iter, It end, size_t i, const std::string& name)

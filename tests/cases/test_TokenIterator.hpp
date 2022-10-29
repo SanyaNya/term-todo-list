@@ -1,13 +1,19 @@
 TEST("TokenIterator",
     SUBTEST("Empty", []()
     {
+        using namespace todolist;
+        
         const std::array<const char*, 0> argv{};
-        auto[it, end] = token_iter_pair(argv);
+        auto[it, end] = 
+            Tokenizer::iter_pair(argv.data(), argv.size());
+
         assert(it == end);
     }),
 
     SUBTEST("Word::Keyword", []()
     {
+        using namespace todolist;
+
         size_t i = 0;
         const std::array argv = 
         {
@@ -21,7 +27,7 @@ TEST("TokenIterator",
             "like"
         };
 
-        for(auto[it, end] = token_iter_pair(argv); ; ++it, ++i)
+        for(auto[it, end] = Tokenizer::iter_pair(argv.data(), argv.size()); ; ++it, ++i)
         {
             using namespace todolist::Tokenizer::Tokens;
             check_keyword(it, end, i, argv[i]);
@@ -30,14 +36,15 @@ TEST("TokenIterator",
             else break;
         }
 
-        using namespace todolist;
         assert(i+1 == std::variant_size_v<Tokenizer::Tokens::Keyword>);
     }),
 
     SUBTEST("Word::Number", []()
     {
+        using namespace todolist;
+
         const std::array argv{ "0", "-123", "x32", "64qwerty", "2.16" };
-        auto[it, end] = token_iter_pair(argv);
+        auto[it, end] = Tokenizer::iter_pair(argv.data(), argv.size());
 
         using namespace todolist::Tokenizer::Tokens;
 
@@ -61,8 +68,10 @@ TEST("TokenIterator",
 
     SUBTEST("Word::String", []()
     {
+        using namespace todolist;
+        
         const std::array argv{ "asd123", "qwerty=\"a b\"" };
-        auto[it, end] = token_iter_pair(argv);
+        auto[it, end] = Tokenizer::iter_pair(argv.data(), argv.size());
 
         using namespace todolist::Tokenizer::Tokens;
 
@@ -80,8 +89,10 @@ TEST("TokenIterator",
 
     SUBTEST("Delimiters", []()
     {
+        using namespace todolist;
+        
         const std::array argv{ "<>= \n\t\".-:" };
-        auto[it, end] = token_iter_pair(argv);
+        auto[it, end] = Tokenizer::iter_pair(argv.data(), argv.size());
 
         using namespace todolist::Tokenizer::Tokens;
 
