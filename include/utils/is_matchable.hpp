@@ -24,4 +24,21 @@ struct is_matchable<
 template<typename T, typename RawToken>
 constexpr bool is_matchable_v = is_matchable<T, RawToken>::value;
 
+
+template<typename T, typename RawToken, typename = void>
+struct is_nothrow_matchable : std::false_type {};
+
+template<typename T, typename RawToken>
+struct is_nothrow_matchable<
+    T, RawToken, 
+    std::void_t<decltype(
+        noexcept(T::match(std::declval<RawToken>())))>> : 
+    std::bool_constant<
+        std::is_same_v<
+            std::invoke_result_t<decltype(T::match), RawToken>, 
+            std::optional<T>>> {};
+
+template<typename T, typename RawToken>
+constexpr bool is_nothrow_matchable_v = is_matchable<T, RawToken>::value;
+
 } //namespace todolist::utils

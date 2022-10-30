@@ -16,7 +16,12 @@ struct Matcher
     Matcher(RawToken w) noexcept : word(w) {}
 
     template<typename T>
-    std::optional<T> operator()() const noexcept
+    std::optional<T> operator()() const 
+        noexcept(
+            (utils::is_matchable_v<T, RawToken> && 
+             utils::is_nothrow_matchable_v<T, RawToken>) ||
+            (utils::is_named_v<T> && 
+             std::is_nothrow_constructible_v<T, T&&>))
     {
         if constexpr(utils::is_variant_v<T>) 
             return utils::variant_type_match<T, Matcher<RawToken>>(*this);
@@ -30,7 +35,9 @@ struct Matcher
 };
 
 template<typename Token, typename RawToken>
-inline std::optional<Token> match(RawToken word) noexcept
+inline std::optional<Token> match(RawToken word) 
+    noexcept(noexcept(
+        std::declval<Matcher<RawToken>>().template operator()<Token>()))
 {
     Matcher<RawToken> m(word);
     return m.template operator()<Token>();
