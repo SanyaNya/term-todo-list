@@ -7,7 +7,7 @@ namespace todolist::utils
 {
 
 template<typename Variant, typename Predicate, size_t I = 0>
-inline std::optional<Variant> variant_type_match(Predicate p = Predicate())
+inline std::optional<Variant> variant_type_match(const Predicate& p = Predicate())
     noexcept(noexcept(
         p.template operator()<std::variant_alternative_t<I, Variant>>()))
 {
