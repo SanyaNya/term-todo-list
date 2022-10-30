@@ -20,23 +20,25 @@ namespace todolist::Parser
 template<typename Arg, typename It>
 inline std::optional<Arg> parse_arg(It& begin, It end) noexcept
 {
+    if(begin == end) return std::nullopt;
+
     using V = std::decay_t<decltype(*begin)>;
 
     if constexpr(utils::typelist_dfs_contains_v<V, Arg>) 
     {
-        auto t = *begin++;
+        auto t = *begin;
 
         if(utils::dfs_holds_alternative<Arg>(t))
+        {
+            ++begin;
             return utils::dfs_get<Arg>(t);
+        }
 
         return std::nullopt;
     }
 
     if constexpr(utils::is_parsable_v<Arg, It>)
         return Arg::template parse(begin, end);
-
-    if constexpr(utils::is_named_v<Arg> && utils::is_named_v<V>)
-        return Arg{};
 }
 
 namespace detail
