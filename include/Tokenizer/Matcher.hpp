@@ -13,7 +13,13 @@ struct Matcher
 {
     RawToken word;
 
-    Matcher(RawToken w) noexcept : word(w) {}
+    template<typename U>
+    Matcher(U&& w) 
+        noexcept(std::is_nothrow_constructible_v<RawToken, U&&>) : 
+            word(w) {}
+
+    Matcher(const Matcher&) = default;
+    Matcher(Matcher&&) = default;
 
     template<typename T>
     std::optional<T> operator()() const 
@@ -24,7 +30,7 @@ struct Matcher
              std::is_nothrow_constructible_v<T, T&&>))
     {
         if constexpr(utils::is_variant_v<T>) 
-            return utils::variant_type_match<T, Matcher<RawToken>>(*this);
+            return utils::variant_type_match<T>(*this);
 
         if constexpr(utils::is_matchable_v<T, RawToken>)
             return T::match(word);
