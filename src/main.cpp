@@ -1,5 +1,6 @@
 #include "cli.hpp"
 #include "Parser/Arg/VarArray.hpp"
+#include "Parser/Arg/LongString.hpp"
 
 using namespace todolist;
 using namespace todolist::Tokenizer::Tokens;
@@ -7,15 +8,13 @@ using namespace todolist::Tokenizer::Tokens;
 struct AddCommand
 {
     static constexpr std::string_view name = "add";
-    std::tuple<Dspace, String, Dequal, Dquotes, Parser::VarArray<String>, Dquotes> args;
+    std::tuple<Dspace, String, Dequal, Parser::LongString> args;
 
     void execute()
     {
         std::cout << "Command add: " 
-                  << std::get<1>(args).value << "=\"";
-        for(auto&& e : std::get<4>(args).array)
-            std::cout << e.value << " ";
-        std::cout << "\"\n";
+                  << std::get<1>(args).value << "=\"" 
+                  << std::get<3>(args).value << "\"\n";
     }
 };
 
