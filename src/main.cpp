@@ -1,4 +1,43 @@
-int main()
-{
+#include "cli.hpp"
 
+using namespace todolist;
+using namespace todolist::Tokenizer::Tokens;
+
+struct AddCommand
+{
+    static constexpr std::string_view name = "add";
+    std::tuple<Dspace, String, Dequal, Dquotes, String, Dquotes> args;
+
+    void execute()
+    {
+        std::cout << std::get<1>(args).value << "=\"" << std::get<4>(args).value << "\"\n";
+    }
+};
+
+struct DoneCommand
+{
+    static constexpr std::string_view name = "done";
+    std::tuple<> args;
+
+    void execute() {}
+};
+
+using Command =
+    std::variant<
+        AddCommand,
+        DoneCommand>;
+
+using TokenIterator = 
+    Tokenizer::Iterator<
+        utils::ArgvIterator>;
+
+int main(int argc, const char* const argv[])
+{
+    //TODO_CLI cli;
+    //auto cmd = cli.parse(argc, argv);
+    //std::visit([](auto c){ c.execute(); }, cmd);
+    
+    CLI<Command> cli(++argv, --argc);
+    auto cmdv = cli.parse();
+    cli.execute(cmdv);
 }
