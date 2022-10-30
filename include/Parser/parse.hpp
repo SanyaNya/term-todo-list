@@ -9,8 +9,9 @@
 #include "utils/dfs_holds_alternative.hpp"
 #include "utils/is_named.hpp"
 #include "utils/is_parsable.hpp"
-#include "unexpected_end_of_tokens.hpp"
-#include "unexpected_token.hpp"
+#include "Error/unexpected_end_of_tokens.hpp"
+#include "Error/unexpected_token.hpp"
+#include "Error/cmd_not_found.hpp"
 
 namespace todolist::Parser
 {
