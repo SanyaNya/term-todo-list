@@ -50,4 +50,15 @@ template<typename List, typename T>
 using typelist_path_dfs_t = 
     typename typelist_path_dfs<List, T>::type;
 
+template<typename List, typename T>
+struct typelist_dfs_contains : 
+    std::bool_constant<
+        !std::is_same_v<
+            typelist_path_dfs_t<List, T>,
+            void>> {};
+
+template<typename List, typename T>
+constexpr bool typelist_dfs_contains_v = 
+    typelist_dfs_contains<List, T>::value;
+
 } //namespace
