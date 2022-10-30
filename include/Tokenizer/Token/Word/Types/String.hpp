@@ -10,7 +10,7 @@ struct String
 {
     std::string_view value;
 
-    static std::optional<String> match(std::string_view word)
+    static std::optional<String> match(std::string_view word) noexcept
     {
         return String{word};
     }
