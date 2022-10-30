@@ -24,7 +24,7 @@ inline void check_keyword(It iter, It end, size_t i, const std::string& name)
 }
 
 template<typename It>
-inline void check_num(It iter, It end, int val)
+inline void check_num(It iter, It end, unsigned val)
 {
     using namespace todolist;
     using namespace todolist::Tokenizer::Tokens;
