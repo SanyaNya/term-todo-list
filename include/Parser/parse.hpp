@@ -6,8 +6,11 @@
 #include <iostream>
 #include <tuple>
 #include "utils/dfs_get.hpp"
+#include "utils/dfs_holds_alternative.hpp"
 #include "utils/is_named.hpp"
 #include "utils/is_parsable.hpp"
+#include "unexpected_end_of_tokens.hpp"
+#include "unexpected_token.hpp"
 
 namespace todolist::Parser
 {
@@ -18,9 +21,20 @@ namespace detail
 template<typename Arg, typename It>
 inline Arg parse_arg(It& begin, It end)
 {
+    if(begin == end) 
+        throw unexpected_end_of_tokens();
+
     using V = std::decay_t<decltype(*begin)>;
+
     if constexpr(utils::typelist_dfs_contains_v<V, Arg>) 
-        return utils::dfs_get<Arg>(*begin++);
+    {
+        auto t = *begin++;
+
+        if(!utils::dfs_holds_alternative<Arg>(t))
+            throw unexpected_token<Arg>();
+
+        return utils::dfs_get<Arg>(t);
+    }
 
     if constexpr(utils::is_parsable_v<Arg, It>)
         return Arg::template parse(begin, end);

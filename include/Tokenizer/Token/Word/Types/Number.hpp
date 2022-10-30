@@ -9,6 +9,8 @@ namespace todolist::Tokenizer::Tokens
 
 struct Number
 {
+    static constexpr std::string_view token_name = "number";
+
     unsigned value;
 
     static std::optional<Number> match(std::string_view word) noexcept

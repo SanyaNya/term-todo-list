@@ -33,11 +33,14 @@ using TokenIterator =
 
 int main(int argc, const char* const argv[])
 {
-    //TODO_CLI cli;
-    //auto cmd = cli.parse(argc, argv);
-    //std::visit([](auto c){ c.execute(); }, cmd);
-    
     CLI<Command> cli(++argv, --argc);
-    auto cmdv = cli.parse();
-    cli.execute(cmdv);
+    try
+    {
+        auto cmdv = cli.parse();
+        cli.execute(cmdv);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
 }
