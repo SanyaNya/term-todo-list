@@ -27,7 +27,7 @@ template<>
 struct dfs_get_h<std::tuple<>>
 {
     template<typename V>
-    static auto f(V&& v)
+    static auto f(V&& v) noexcept
     {
         return v;
     }
