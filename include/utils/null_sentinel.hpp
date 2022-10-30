@@ -11,14 +11,4 @@ struct null_sentinel
     }
 };
 
-inline constexpr bool operator==(char c, null_sentinel)
-{ 
-    return c == '\0'; 
-}
-
-inline constexpr bool operator!=(char c, null_sentinel)
-{ 
-    return c != '\0'; 
-}
-
 } //namespace todolist::utils
