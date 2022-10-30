@@ -12,6 +12,7 @@ add_compile_options(
     -Wextra
     -Wconversion
     -Wsign-conversion
+    -Wno-unused-but-set-parameter
     $<$<CONFIG:DEBUG>:-O0>
     $<$<CONFIG:DEBUG>:-g3>
     $<$<CONFIG:DEBUG>:-fsanitize=address>
