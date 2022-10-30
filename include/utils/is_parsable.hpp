@@ -15,10 +15,10 @@ template<typename T, typename It>
 struct is_parsable<
     T, It, 
     std::void_t<decltype(
-        noexcept(T::parse(std::declval<It>(), std::declval<It>())))>> : 
+        noexcept(T::parse(std::declval<It&>(), std::declval<It>())))>> : 
     std::bool_constant<
         std::is_same_v<
-            std::invoke_result_t<decltype(T::parse), It, It>, 
+            std::invoke_result_t<decltype(T::template parse<It>), It&, It>, 
             std::optional<T>>> {};
 
 template<typename T, typename It>
