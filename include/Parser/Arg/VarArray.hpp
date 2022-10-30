@@ -22,12 +22,13 @@ struct VarArray
 
         while(true)
         {
-            if(auto opt = Parser::parse_arg<Arg>(begin, end))
+            std::optional<Arg> opt;
+            if(begin != end && (opt = Parser::parse_arg<Arg>(begin, end)))
                 va.array.emplace_back(opt.value());
             else 
                 break;
 
-            if(!Parser::parse_arg<Delim>(begin, end))
+            if(begin == end || !Parser::parse_arg<Delim>(begin, end))
                 break;
         }
 

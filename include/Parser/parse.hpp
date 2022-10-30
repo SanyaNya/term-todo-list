@@ -20,8 +20,6 @@ namespace todolist::Parser
 template<typename Arg, typename It>
 inline std::optional<Arg> parse_arg(It& begin, It end) noexcept
 {
-    if(begin == end) return std::nullopt;
-
     using V = std::decay_t<decltype(*begin)>;
 
     if constexpr(utils::typelist_dfs_contains_v<V, Arg>) 
