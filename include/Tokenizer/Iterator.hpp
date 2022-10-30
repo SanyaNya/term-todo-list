@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iterator>
+#include <algorithm>
 #include "utils/null_sentinel.hpp"
 #include "Matcher.hpp"
 #include "Token/Token.hpp"
@@ -51,6 +52,17 @@ public:
                     cur_word.token(next_delim)).value();
         else
             return match<Tokens::Delimiter>(*cur_word).value();
+    }
+
+    std::string raw_token() const
+    {
+        std::string res;
+
+        if(cur_word != next_delim)
+            std::copy(cur_word, next_delim, std::back_inserter(res));
+        else res.push_back(*next_delim);
+
+        return res;
     }
 
     Iterator& operator++() noexcept
