@@ -11,7 +11,7 @@ struct Number
 {
     unsigned value;
 
-    static std::optional<Number> match(std::string_view word)
+    static std::optional<Number> match(std::string_view word) noexcept
     {
         unsigned val;
         const auto [ptr, err] = 
