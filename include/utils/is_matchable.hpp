@@ -39,6 +39,6 @@ struct is_nothrow_matchable<
             std::optional<T>>> {};
 
 template<typename T, typename RawToken>
-constexpr bool is_nothrow_matchable_v = is_matchable<T, RawToken>::value;
+constexpr bool is_nothrow_matchable_v = is_nothrow_matchable<T, RawToken>::value;
 
 } //namespace todolist::utils
