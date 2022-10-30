@@ -5,6 +5,7 @@
 #include <type_traits>
 #include <iostream>
 #include <tuple>
+#include <optional>
 #include "utils/dfs_get.hpp"
 #include "utils/dfs_holds_alternative.hpp"
 #include "utils/is_named.hpp"
@@ -16,25 +17,19 @@
 namespace todolist::Parser
 {
 
-namespace detail
-{
-
 template<typename Arg, typename It>
-inline Arg parse_arg(It& begin, It end)
+inline std::optional<Arg> parse_arg(It& begin, It end) noexcept
 {
-    if(begin == end) 
-        throw unexpected_end_of_tokens();
-
     using V = std::decay_t<decltype(*begin)>;
 
     if constexpr(utils::typelist_dfs_contains_v<V, Arg>) 
     {
         auto t = *begin++;
 
-        if(!utils::dfs_holds_alternative<Arg>(t))
-            throw unexpected_token<Arg>();
+        if(utils::dfs_holds_alternative<Arg>(t))
+            return utils::dfs_get<Arg>(t);
 
-        return utils::dfs_get<Arg>(t);
+        return std::nullopt;
     }
 
     if constexpr(utils::is_parsable_v<Arg, It>)
@@ -44,10 +39,25 @@ inline Arg parse_arg(It& begin, It end)
         return Arg{};
 }
 
+namespace detail
+{
+
+template<typename Arg, typename It>
+inline Arg parse_arg_exc(It& begin, It end)
+{
+    if(begin == end) throw unexpected_end_of_tokens();
+
+    if(auto opt = parse_arg<Arg>(begin, end)) 
+        return opt.value();
+
+    throw unexpected_token<Arg>();
+}
+
 template<typename Args, typename It, std::size_t ... Is>
 inline Args parse_args(It& begin, It end, std::index_sequence<Is...>)
 {
-    return Args{parse_arg<std::tuple_element_t<Is, Args>>(begin, end)...};
+    return Args{
+        parse_arg_exc<std::tuple_element_t<Is, Args>>(begin, end)...};
 }
 
 } //namespace detail
@@ -55,8 +65,6 @@ inline Args parse_args(It& begin, It end, std::index_sequence<Is...>)
 template<typename Command, typename It>
 inline Command parse(It& begin, It end)
 {
-    std::cout << "Parse command " << Command::name << std::endl;
-
     using Tuple = decltype(std::declval<Command>().args);
 
     return Command{
