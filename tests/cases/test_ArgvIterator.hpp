@@ -46,10 +46,11 @@ TEST("ArgvIterator",
 
         assert(std::equal(it, end, s.begin()));
 
+        int i = 0;
         for(const char* arg : argv)
         {
             assert(it.token() == arg);
-            it.to_next_token();
+            if(++i != argc) it.to_next_token();
         }
     })
 )
