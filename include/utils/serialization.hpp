@@ -7,22 +7,36 @@
 namespace todolist::utils
 {
 
-inline void serialize(std::ostream& os, const std::string& s)
+inline void serialize(std::ostream& os, std::uint64_t n)
 {
-    auto sz = utils::host_to_network(static_cast<std::uint64_t>(s.size()));
-    os.write(reinterpret_cast<char*>(&sz), sizeof(sz));
-    os.write(s.data(), s.size());
+    auto nn = utils::host_to_network(static_cast<std::uint64_t>(n));
+    os.write(reinterpret_cast<char*>(&nn), sizeof(nn));
+}
+
+inline void serialize(std::ostream& os, size_t size)
+{
+    serialize(os, static_cast<std::uint64_t>(size));
 }
 
 inline void serialize(std::ostream& os, std::time_t t)
 {
-    auto n = utils::host_to_network(static_cast<std::uint64_t>(t));
-    os.write(reinterpret_cast<char*>(&n), sizeof(n));
+    serialize(os, static_cast<std::uint64_t>(t));
+}
+
+inline void serialize(std::ostream& os, char c)
+{
+    os.put(c);
 }
 
 inline void serialize(std::ostream& os, bool b)
 {
-    os.put(static_cast<char>(b));
+    serialize(os, static_cast<char>(b));
+}
+
+inline void serialize(std::ostream& os, const std::string& s)
+{
+    serialize(os, s.size());
+    os.write(s.data(), static_cast<std::streamsize>(s.size()));
 }
 
 namespace detail
@@ -76,7 +90,7 @@ struct deserialize_h<std::string>
 
         std::string s(sz, 0);
 
-        is.read(s.data(), sz);
+        is.read(s.data(), static_cast<std::streamsize>(sz));
 
         return s;
     }
