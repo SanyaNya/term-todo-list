@@ -3,46 +3,121 @@
 #include "Parser/Arg/LongString.hpp"
 #include "Parser/Arg/Date.hpp"
 #include "Parser/Arg/Optional.hpp"
+#include "Parser/Arg/Tuple.hpp"
+#include "Parser/Arg/Predicate.hpp"
+#include "TodoList.hpp"
 
-using namespace todolist;
-using namespace todolist::Tokenizer::Tokens;
+namespace todolist
+{
 
-struct AddCommand
+using namespace Tokenizer::Tokens;
+
+inline std::string to_string(std::string_view sv)
+{
+    return std::string{sv.begin(), sv.end()};
+}
+
+inline TodoList todo;
+
+struct AddCmd
 {
     static constexpr std::string_view name = "add";
-    std::tuple<Dspace, String, Dequal, Parser::Optional<String>, Dequal> args;
+    std::tuple<
+        Dspace, String, 
+        Dspace, Parser::LongString, 
+        Dspace, Parser::Date,
+        Dspace, String> args;
 
     void execute()
     {
-        std::cout << "Command add: " 
-                  << std::get<1>(args).value << "=\"";
-        auto opt = std::get<3>(args).value;
-        if(opt) std::cout << opt.value().value;
-        else std::cout << "NULL";
-        std::cout << "\"\n";
+        todo.add(
+            Task{
+                to_string(std::get<1>(args).value), 
+                to_string(std::get<3>(args).value), 
+                std::get<5>(args).value, 
+                to_string(std::get<7>(args).value), 
+                false});
+
+        std::cout 
+            << "Task \"" << std::get<1>(args).value << "\" added\n";
     }
 };
 
-struct DoneCommand
+struct DoneCmd
 {
     static constexpr std::string_view name = "done";
-    std::tuple<> args;
+    std::tuple<Dspace, String> args;
 
-    void execute() {}
+    void execute()
+    {
+        try
+        {
+            todo.done(to_string(std::get<1>(args).value));
+        }
+        catch(const std::out_of_range& e)
+        {
+            std::cout 
+                << "Task \"" << std::get<1>(args).value << "\" not found\n";
+        }
+    }
+};
+
+struct UpdateCmd
+{
+    static constexpr std::string_view name = "update";
+    std::tuple<Dspace, String> args;
+
+    void execute()
+    {
+        //TODO
+    }
+};
+
+struct DeleteCmd
+{
+    static constexpr std::string_view name = "delete";
+    std::tuple<Dspace, String> args;
+
+    void execute()
+    {
+        if(todo.del(to_string(std::get<1>(args).value)))
+            std::cout << "Task \"" << std::get<1>(args).value << "\" deleted\n";
+        else
+            std::cout << "There is no task \"" << std::get<1>(args).value << "\"\n";
+    }
+};
+
+struct SelectCmd
+{
+    static constexpr std::string_view name = "select";
+    std::tuple<
+        Dspace, Dstar, 
+        Parser::Optional<
+            Parser::Tuple<
+                Dspace, Kwhere, 
+                Dspace, Parser::VarArray<
+                            Parser::Predicate, 
+                            Parser::Tuple<Dspace, Kand, Dspace>>>>> args;
+
+    void execute()
+    {
+        //TODO
+    }
 };
 
 using Command =
     std::variant<
-        AddCommand,
-        DoneCommand>;
+        AddCmd,
+        DoneCmd,
+        UpdateCmd,
+        DeleteCmd,
+        SelectCmd>;
 
-using TokenIterator = 
-    Tokenizer::Iterator<
-        utils::ArgvIterator>;
+} //namespace todolist
 
 int main(int argc, const char* const argv[])
 {
-    CLI<Command> cli(++argv, --argc);
+    todolist::CLI<todolist::Command> cli(++argv, --argc);
     try
     {
         auto cmdv = cli.parse();
