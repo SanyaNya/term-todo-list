@@ -5,7 +5,7 @@
 #include <array>
 #include "Tokenizer/iter_pair.hpp"
 
-template<typename It>
+template<typename KW, typename It>
 inline void check_keyword(It iter, It end, size_t i, const std::string& name)
 {
     using namespace todolist;
@@ -14,13 +14,13 @@ inline void check_keyword(It iter, It end, size_t i, const std::string& name)
     assert(iter != end);
     Tokenizer::Token w = *iter;
     assert(std::holds_alternative<Word>(w));
-    assert(std::holds_alternative<Keyword>(std::get<Word>(w)));
-    assert(std::get<Keyword>(std::get<Word>(w)).index() == i);
+    assert(std::holds_alternative<KW>(std::get<Word>(w)));
+    assert(std::get<KW>(std::get<Word>(w)).index() == i);
     std::visit(
         [=](auto t)
         {
             assert(decltype(t)::name == name);
-        }, std::get<Keyword>(std::get<Word>(w)));
+        }, std::get<KW>(std::get<Word>(w)));
 }
 
 template<typename It>

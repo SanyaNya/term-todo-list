@@ -11,19 +11,13 @@ DEFINE_KEYWORD(description)
 DEFINE_KEYWORD(date)
 DEFINE_KEYWORD(category)
 DEFINE_KEYWORD(status)
-DEFINE_KEYWORD(where)
-DEFINE_KEYWORD(and)
-DEFINE_KEYWORD(like)
 
-using Keyword =
+using ReferenceKeyword =
     std::variant<
         Kname,
         Kdescription,
         Kdate,
         Kcategory,
-        Kstatus,
-        Kwhere,
-        Kand,
-        Klike>;
+        Kstatus>;
 
 } //namespace todolist::Tokenizer::Token

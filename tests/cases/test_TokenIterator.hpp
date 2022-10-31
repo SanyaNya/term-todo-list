@@ -10,7 +10,7 @@ TEST("TokenIterator",
         assert(it == end);
     }),
 
-    SUBTEST("Word::Keyword", []()
+    SUBTEST("Word::ReferenceKeyword", []()
     {
         using namespace todolist;
 
@@ -21,7 +21,28 @@ TEST("TokenIterator",
             "description", 
             "date", 
             "category", 
-            "status", 
+            "status"
+        };
+
+        for(auto[it, end] = Tokenizer::iter_pair(argv.data(), argv.size()); ; ++it, ++i)
+        {
+            using namespace todolist::Tokenizer::Tokens;
+            check_keyword<Tokenizer::Tokens::ReferenceKeyword>(it, end, i, argv[i]);
+            
+            if(++it != end) check_delim<Empty, Dspace>(it, end);
+            else break;
+        }
+
+        assert(i+1 == std::variant_size_v<Tokenizer::Tokens::ReferenceKeyword>);
+    }),
+
+    SUBTEST("Word::LinkKeyword", []()
+    {
+        using namespace todolist;
+
+        size_t i = 0;
+        const std::array argv = 
+        {
             "where", 
             "and", 
             "like"
@@ -30,13 +51,13 @@ TEST("TokenIterator",
         for(auto[it, end] = Tokenizer::iter_pair(argv.data(), argv.size()); ; ++it, ++i)
         {
             using namespace todolist::Tokenizer::Tokens;
-            check_keyword(it, end, i, argv[i]);
+            check_keyword<Tokenizer::Tokens::LinkKeyword>(it, end, i, argv[i]);
             
             if(++it != end) check_delim<Empty, Dspace>(it, end);
             else break;
         }
 
-        assert(i+1 == std::variant_size_v<Tokenizer::Tokens::Keyword>);
+        assert(i+1 == std::variant_size_v<Tokenizer::Tokens::LinkKeyword>);
     }),
 
     SUBTEST("Word::Number", []()
