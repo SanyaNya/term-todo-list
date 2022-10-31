@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 namespace todolist::utils
 {
 
@@ -16,7 +18,7 @@ enum class endian
 #endif
 };
 
-inline unsigned short byteswap(unsigned short n) noexcept
+inline std::uint16_t byteswap(std::uint16_t n) noexcept
 {
 #ifdef _MSC_VER
     return _byteswap_ushort(n);
@@ -25,7 +27,7 @@ inline unsigned short byteswap(unsigned short n) noexcept
 #endif
 }
 
-inline unsigned long byteswap(unsigned long n) noexcept
+inline std::uint32_t byteswap(std::uint32_t n) noexcept
 {
 #ifdef _MSC_VER
     return _byteswap_ulong(n);
@@ -34,7 +36,7 @@ inline unsigned long byteswap(unsigned long n) noexcept
 #endif
 }
 
-inline unsigned long long byteswap(unsigned long long n) noexcept
+inline std::uint64_t byteswap(std::uint64_t n) noexcept
 {
 #ifdef _MSC_VER
     return _byteswap_uint64(n);
