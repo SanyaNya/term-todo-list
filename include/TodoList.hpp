@@ -14,7 +14,7 @@ public:
     void add(Task&& task);
     void done(const std::string& name);
     void update(const std::string& name, Task&& task);
-    void del(const std::string& name);
+    size_t del(const std::string& name);
 
     auto begin() noexcept;
     auto begin() const noexcept;

@@ -18,9 +18,9 @@ void TodoList::update(const std::string& name, Task&& task)
     tasks.at(name) = std::move(task);
 }
 
-void TodoList::del(const std::string& name)
+size_t TodoList::del(const std::string& name)
 {
-    tasks.erase(name);
+    return tasks.erase(name);
 }
 
 auto TodoList::begin() noexcept { return tasks.begin(); }
