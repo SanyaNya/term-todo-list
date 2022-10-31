@@ -39,25 +39,45 @@ inline std::optional<Arg> parse_arg(It& begin, It end) noexcept
         return Arg::template parse(begin, end);
 }
 
+template<typename Arg>
+struct Optional;
+
 namespace detail
 {
 
-template<typename Arg, typename It>
-inline Arg parse_arg_exc(It& begin, It end)
+template<typename Arg>
+struct parse_arg_exc
 {
-    if(begin == end) throw unexpected_end_of_tokens();
+    template<typename It>
+    static Arg f(It& begin, It end)
+    {
+        if(begin == end) 
+            throw unexpected_end_of_tokens();
 
-    if(auto opt = parse_arg<Arg>(begin, end)) 
-        return opt.value();
+        if(auto opt = parse_arg<Arg>(begin, end)) 
+            return opt.value();
 
-    throw unexpected_token<Arg>();
-}
+        throw unexpected_token<Arg>();
+    }
+};
+
+template<typename T>
+struct parse_arg_exc<Optional<T>>
+{
+    template<typename It>
+    static Optional<T> f(It& begin, It end)
+    {
+        if(begin == end) return Optional<T>{ std::nullopt };
+
+        return parse_arg<Optional<T>>(begin, end).value();
+    }
+};
 
 template<typename Args, typename It, std::size_t ... Is>
 inline Args parse_args(It& begin, It end, std::index_sequence<Is...>)
 {
     return Args{
-        parse_arg_exc<std::tuple_element_t<Is, Args>>(begin, end)...};
+        parse_arg_exc<std::tuple_element_t<Is, Args>>::f(begin, end)...};
 }
 
 } //namespace detail
