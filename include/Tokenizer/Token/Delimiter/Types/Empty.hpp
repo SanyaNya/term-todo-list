@@ -1,6 +1,5 @@
 #pragma once
 
-#include <optional>
 #include <variant>
 #include "../define_delimiter.hpp"
 
