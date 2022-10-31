@@ -88,6 +88,12 @@ struct Date
             return std::nullopt;
         }
 
+        if(begin == end || !Parser::parse_arg<Quotes>(begin, end))
+        {
+            begin = initial_begin;
+            return std::nullopt;
+        }
+
         t.tm_year = static_cast<int>(year.value().value);
         t.tm_mon  = static_cast<int>(month.value().value);
         t.tm_mday = static_cast<int>(day.value().value);
