@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string_view>
+
 #define DEFINE_DELIMITER(NAME, SYMBOL)                        \
     struct D ## NAME                                          \
     {                                                         \

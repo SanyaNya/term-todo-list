@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string_view>
+
 #define DEFINE_KEYWORD(NAME)                                  \
     struct K ## NAME                                          \
     {                                                         \
