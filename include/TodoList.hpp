@@ -11,18 +11,33 @@ class TodoList
     std::unordered_map<std::string, Task> tasks;
 
 public:
-    void add(Task&& task);
-    void done(const std::string& name);
-    void update(const std::string& name, Task&& task);
-    size_t del(const std::string& name);
+    void add(Task&& task)
+    {
+        tasks.emplace(task.name, std::move(task));
+    }
 
-    auto begin() noexcept;
-    auto begin() const noexcept;
-    auto cbegin() const noexcept;
+    void done(const std::string& name)
+    {
+        tasks.at(name).status = true;
+    }
 
-    auto end() noexcept;
-    auto end() const noexcept;
-    auto cend() const noexcept;
+    void update(const std::string& name, Task&& task)
+    {
+        tasks.at(name) = std::move(task);
+    }
+
+    size_t del(const std::string& name)
+    {
+        return tasks.erase(name);
+    }
+
+    auto begin() noexcept { return tasks.begin(); }
+    auto begin() const noexcept { return tasks.begin(); }
+    auto cbegin() const noexcept { return tasks.cbegin(); }
+
+    auto end() noexcept { return tasks.end(); }
+    auto end() const noexcept { return tasks.end(); }
+    auto cend() const noexcept { return tasks.cend(); }
 };
 
 } //namespace todolist

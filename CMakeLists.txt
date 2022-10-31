@@ -23,7 +23,9 @@ add_link_options(
     $<$<CONFIG:DEBUG>:-fsanitize=address>
     $<$<CONFIG:DEBUG>:-fsanitize=undefined>)
 
-add_subdirectory(src)
+add_executable(${PROJECT_NAME} main.cpp)
+
+target_include_directories(${PROJECT_NAME} PUBLIC include)
 
 if(BUILD_TESTS)
     add_subdirectory(tests)
