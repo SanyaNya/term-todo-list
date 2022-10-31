@@ -2,6 +2,7 @@
 #include "Parser/Arg/VarArray.hpp"
 #include "Parser/Arg/LongString.hpp"
 #include "Parser/Arg/Date.hpp"
+#include "Parser/Arg/Optional.hpp"
 
 using namespace todolist;
 using namespace todolist::Tokenizer::Tokens;
@@ -9,15 +10,16 @@ using namespace todolist::Tokenizer::Tokens;
 struct AddCommand
 {
     static constexpr std::string_view name = "add";
-    std::tuple<Dspace, String, Dequal, Parser::Date> args;
+    std::tuple<Dspace, String, Dequal, Parser::Optional<String>, Dequal> args;
 
     void execute()
     {
         std::cout << "Command add: " 
                   << std::get<1>(args).value << "=\"";
-        auto d = std::get<3>(args);
-        std::tm t = *std::localtime(&d.value);
-        std::cout << t.tm_year << "-" << t.tm_mon << "-" << t.tm_mday << " " << t.tm_hour << ":" << t.tm_min << "\"\n";
+        auto opt = std::get<3>(args).value;
+        if(opt) std::cout << opt.value().value;
+        else std::cout << "NULL";
+        std::cout << "\"\n";
     }
 };
 
