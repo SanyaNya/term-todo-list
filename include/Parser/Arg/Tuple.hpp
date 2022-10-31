@@ -9,7 +9,7 @@ namespace todolist::Parser
 namespace detail
 {
 
-template<typename It, typename Tuple, size_t I = 0>
+template<size_t I, typename It, typename Tuple>
 inline bool tuple_parse(It& begin, It end, Tuple& tuple) noexcept
 {
     using T = std::tuple_element_t<I, Tuple>;
@@ -17,15 +17,14 @@ inline bool tuple_parse(It& begin, It end, Tuple& tuple) noexcept
     if(begin == end) return false;
 
     if(auto opt = Parser::parse_arg<T>(begin, end))
-    {
         std::get<I>(tuple) = opt.value();
-        return true;
-    }
     else
         return false;
 
     if constexpr(I+1 != std::tuple_size_v<Tuple>)
-        return tuple_parse(begin, end, tuple);
+        return tuple_parse<I+1>(begin, end, tuple);
+    else
+        return true;
 }
 
 } //namespace detail
@@ -43,7 +42,7 @@ struct Tuple
         Tuple t;
         It initial_begin = begin;
 
-        if(!detail::tuple_parse(begin, end, t.value))
+        if(!detail::tuple_parse<0>(begin, end, t.value))
         {
             begin = initial_begin;
             return std::nullopt;
