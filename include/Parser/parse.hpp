@@ -8,11 +8,8 @@
 #include <optional>
 #include "utils/dfs_get.hpp"
 #include "utils/dfs_holds_alternative.hpp"
-#include "utils/is_named.hpp"
-#include "utils/is_parsable.hpp"
-#include "Error/unexpected_end_of_tokens.hpp"
-#include "Error/unexpected_token.hpp"
-#include "Error/cmd_not_found.hpp"
+#include "traits/traits.hpp"
+#include "errors/errors.hpp"
 
 namespace todolist::Parser
 {
@@ -35,7 +32,7 @@ inline std::optional<Arg> parse_arg(It& begin, It end) noexcept
         return std::nullopt;
     }
 
-    if constexpr(utils::is_parsable_v<Arg, It>)
+    if constexpr(traits::is_parsable_v<Arg, It>)
         return Arg::template parse(begin, end);
 }
 
