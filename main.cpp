@@ -5,6 +5,7 @@
 #include "Parser/Arg/Optional.hpp"
 #include "Parser/Arg/Tuple.hpp"
 #include "Parser/Arg/Predicate.hpp"
+#include "utils/file_resource.hpp"
 #include "TodoList.hpp"
 
 namespace todolist
@@ -17,7 +18,8 @@ inline std::string to_string(std::string_view sv)
     return std::string{sv.begin(), sv.end()};
 }
 
-inline TodoList todo;
+struct Path { static constexpr auto path = "todolist.data"; };
+inline utils::file_resource<TodoList, Path> todo;
 
 struct AddCmd
 {
@@ -30,7 +32,7 @@ struct AddCmd
 
     void execute()
     {
-        todo.add(
+        todo.get().add(
             Task{
                 to_string(std::get<1>(args).value), 
                 to_string(std::get<3>(args).value), 
@@ -52,7 +54,7 @@ struct DoneCmd
     {
         try
         {
-            todo.done(to_string(std::get<1>(args).value));
+            todo.get().done(to_string(std::get<1>(args).value));
         }
         catch(const std::out_of_range& e)
         {
@@ -80,7 +82,7 @@ struct DeleteCmd
 
     void execute()
     {
-        if(todo.del(to_string(std::get<1>(args).value)))
+        if(todo.get().del(to_string(std::get<1>(args).value)))
             std::cout << "Task \"" << std::get<1>(args).value << "\" deleted\n";
         else
             std::cout << "There is no task \"" << std::get<1>(args).value << "\"\n";
