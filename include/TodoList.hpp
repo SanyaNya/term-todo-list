@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unordered_map>
+#include "serialization/serialization.hpp"
 #include "Task.hpp"
 
 namespace todolist
@@ -10,7 +11,11 @@ class TodoList
 {
     std::unordered_map<std::string, Task> tasks;
 
+    TodoList(decltype(tasks)&& t) : tasks(t) {}
+
 public:
+    TodoList() = default;
+
     void add(Task&& task)
     {
         tasks.emplace(task.name, std::move(task));
@@ -38,6 +43,15 @@ public:
     auto end() noexcept { return tasks.end(); }
     auto end() const noexcept { return tasks.end(); }
     auto cend() const noexcept { return tasks.cend(); }
+
+    void serialize(std::ostream& os) const
+    {
+        serialization::serialize(os, tasks);
+    }
+    static TodoList deserialize(std::istream& is)
+    {
+        return TodoList{serialization::deserialize<decltype(tasks)>(is)};
+    }
 };
 
 } //namespace todolist

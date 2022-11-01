@@ -2,7 +2,7 @@
 
 #include <string>
 #include <ctime>
-#include "utils/serialization.hpp"
+#include "serialization/serialization.hpp"
 
 namespace todolist
 {
@@ -17,22 +17,26 @@ struct Task
 
     void serialize(std::ostream& os) const
     {
-        utils::serialize(os, name);
-        utils::serialize(os, description);
-        utils::serialize(os, date);
-        utils::serialize(os, category);
-        utils::serialize(os, status);
+        using namespace serialization;
+
+        serialize(os, name);
+        serialize(os, description);
+        serialize(os, date);
+        serialize(os, category);
+        serialize(os, status);
     }
 
     static Task deserialize(std::istream& is)
     {
+        using namespace serialization;
+
         return Task
         {
-            utils::deserialize<std::string>(is),
-            utils::deserialize<std::string>(is),
-            utils::deserialize<std::time_t>(is),
-            utils::deserialize<std::string>(is),
-            utils::deserialize<bool>(is)
+            deserialize<std::string>(is),
+            deserialize<std::string>(is),
+            static_cast<std::time_t>(deserialize<net_uint64>(is)),
+            deserialize<std::string>(is),
+            static_cast<bool>(deserialize<net_uint8>(is))
         };
     }
 };
