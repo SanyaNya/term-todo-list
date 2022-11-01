@@ -17,15 +17,21 @@ struct Task
 
     void serialize(std::ostream& os) const
     {
+        using serialization::net_uint8;
+        using serialization::net_uint64;
+
         serialization::serialize(os, name);
         serialization::serialize(os, description);
-        serialization::serialize(os, serialization::net_uint64(date));
+        serialization::serialize(os, net_uint64(date));
         serialization::serialize(os, category);
-        serialization::serialize(os, serialization::net_uint8(status));
+        serialization::serialize(os, net_uint8(status));
     }
 
     static Task deserialize(std::istream& is)
     {
+        using serialization::net_uint8;
+        using serialization::net_uint64;
+
         return Task
         {
             serialization::deserialize<std::string>(is),
