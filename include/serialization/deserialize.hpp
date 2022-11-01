@@ -43,7 +43,7 @@ std::enable_if_t<
         return deserialize<typename T::value_type>(is); 
     };
 
-    size_t sz = static_cast<size_t>(deserialize<net_uint64>(is));
+    size_t sz{static_cast<std::uint64_t>(deserialize<net_uint64>(is))};
     return T{utils::func_iterator(f, 0), utils::func_iterator(f, sz)};
 }
 
@@ -56,7 +56,7 @@ std::enable_if_t<
     traits::has_trivially_copyable_value_type_v<T> &&
     traits::has_data_v<T>, T> deserialize(std::istream& is)
 {
-    size_t sz = static_cast<size_t>(deserialize<net_uint64>(is));
+    size_t sz{static_cast<std::uint64_t>(deserialize<net_uint64>(is))};
     T t(sz);
 
     is.read(std::data(t), sz * sizeof(typename T::value_type));
