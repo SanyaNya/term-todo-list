@@ -34,7 +34,7 @@ std::enable_if_t<
     traits::has_begin_end_v<T>>
 serialize(std::ostream& os, const T& t)
 {
-    serialize(os, std::size(t));
+    serialize(os, net_uint64(std::size(t)));
     for(const auto& obj : t)
         serialize(os, obj);
 }
@@ -49,7 +49,7 @@ std::enable_if_t<
     traits::has_data_v<T>>
 serialize(std::ostream& os, const T& t)
 {
-    serialize(os, std::size(t));
+    serialize(os, net_uint64(std::size(t)));
     os.write(std::data(t), std::size(t)*sizeof(typename T::value_type));
 }
 
