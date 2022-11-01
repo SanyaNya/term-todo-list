@@ -19,9 +19,9 @@ struct Task
     {
         serialization::serialize(os, name);
         serialization::serialize(os, description);
-        serialization::serialize(os, date);
+        serialization::serialize(os, serialization::net_uint64(date));
         serialization::serialize(os, category);
-        serialization::serialize(os, status);
+        serialization::serialize(os, serialization::net_uint8(status));
     }
 
     static Task deserialize(std::istream& is)
