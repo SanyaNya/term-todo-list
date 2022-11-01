@@ -18,8 +18,15 @@ struct net_integral
     static_assert(std::is_integral_v<T>);
 
 public:
+    net_integral() = default;
+    net_integral(const net_integral&) = default;
+    net_integral(net_integral&&) = default;
+    net_integral& operator=(const net_integral&) = default;
+    net_integral& operator=(net_integral&&) = default;
+
     explicit net_integral(T v) noexcept :
         value(utils::host_to_network(v)) {}
+
 
     explicit operator T() const noexcept
     {
