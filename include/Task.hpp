@@ -17,26 +17,23 @@ struct Task
 
     void serialize(std::ostream& os) const
     {
-        using namespace serialization;
-
-        serialize(os, name);
-        serialize(os, description);
-        serialize(os, date);
-        serialize(os, category);
-        serialize(os, status);
+        serialization::serialize(os, name);
+        serialization::serialize(os, description);
+        serialization::serialize(os, date);
+        serialization::serialize(os, category);
+        serialization::serialize(os, status);
     }
 
     static Task deserialize(std::istream& is)
     {
-        using namespace serialization;
-
         return Task
         {
-            deserialize<std::string>(is),
-            deserialize<std::string>(is),
-            static_cast<std::time_t>(deserialize<net_uint64>(is)),
-            deserialize<std::string>(is),
-            static_cast<bool>(deserialize<net_uint8>(is))
+            serialization::deserialize<std::string>(is),
+            serialization::deserialize<std::string>(is),
+            static_cast<std::time_t>(
+                    serialization::deserialize<net_uint64>(is)),
+            serialization::deserialize<std::string>(is),
+            static_cast<bool>(serialization::deserialize<net_uint8>(is))
         };
     }
 };
