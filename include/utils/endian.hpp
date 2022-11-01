@@ -18,6 +18,11 @@ enum class endian
 #endif
 };
 
+inline std::uint8_t byteswap(std::uint8_t n) noexcept
+{
+    return n;
+}
+
 inline std::uint16_t byteswap(std::uint16_t n) noexcept
 {
 #ifdef _MSC_VER
