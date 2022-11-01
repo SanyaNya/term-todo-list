@@ -5,7 +5,7 @@
 #include <optional>
 #include <string_view>
 
-namespace todolist::utils
+namespace todolist::traits
 {
 
 template<typename T, typename RawToken, typename = void>
@@ -24,4 +24,4 @@ struct is_matchable<
 template<typename T, typename RawToken>
 constexpr bool is_matchable_v = is_matchable<T, RawToken>::value;
 
-} //namespace todolist::utils
+} //namespace todolist::traits

@@ -2,7 +2,7 @@
 
 #include <variant>
 
-namespace todolist::utils
+namespace todolist::traits
 {
 
 template<typename T>
@@ -14,4 +14,4 @@ struct is_variant<std::variant<Args...>> : std::true_type {};
 template<typename T>
 constexpr bool is_variant_v = is_variant<T>::value;
 
-} //namespace todolist::utils
+} //namespace todolist::traits

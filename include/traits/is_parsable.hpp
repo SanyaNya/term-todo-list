@@ -5,7 +5,7 @@
 #include <optional>
 #include <string_view>
 
-namespace todolist::utils
+namespace todolist::traits
 {
 
 template<typename T, typename It, typename = void>
@@ -24,4 +24,4 @@ struct is_parsable<
 template<typename T, typename It>
 constexpr bool is_parsable_v = is_parsable<T, It>::value;
 
-} //namespace todolist::utils
+} //namespace todolist::traits

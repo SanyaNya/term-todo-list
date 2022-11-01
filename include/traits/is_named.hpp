@@ -2,7 +2,7 @@
 
 #include <type_traits>
 
-namespace todolist::utils
+namespace todolist::traits
 {
 
 template<typename T, typename = void>
@@ -14,4 +14,4 @@ struct is_named<T, std::void_t<decltype(T::name)>> : std::true_type {};
 template<typename T>
 constexpr bool is_named_v = is_named<T>::value;
 
-} //namespace todolist::utils
+} //namespace todolist::traits
