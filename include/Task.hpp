@@ -22,7 +22,8 @@ struct Task
 
         serialization::serialize(os, name);
         serialization::serialize(os, description);
-        serialization::serialize(os, net_uint64(date));
+        serialization::serialize(
+                os, net_uint64(static_cast<std::uint64_t>(date)));
         serialization::serialize(os, category);
         serialization::serialize(os, net_uint8(status));
     }

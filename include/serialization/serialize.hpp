@@ -50,7 +50,10 @@ std::enable_if_t<
 serialize(std::ostream& os, const T& t)
 {
     serialize(os, net_uint64(std::size(t)));
-    os.write(std::data(t), std::size(t)*sizeof(typename T::value_type));
+    os.write(
+        std::data(t), 
+        static_cast<std::streamsize>(
+            std::size(t)*sizeof(typename T::value_type)));
 }
 
 } //namespace todolist::serialization
