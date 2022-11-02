@@ -52,15 +52,18 @@ inline
 std::enable_if_t<
     !traits::is_deserializable_v<T>                &&
     !std::is_trivially_copyable_v<T>               &&
-    std::is_constructible_v<T, size_t>             &&
+    std::is_default_constructible_v<T>             &&
+    traits::is_resizable_v<T>                      &&
     traits::has_trivially_copyable_value_type_v<T> &&
     traits::has_data_v<T>, T> deserialize(std::istream& is)
 {
     size_t sz{static_cast<std::uint64_t>(deserialize<net_uint64>(is))};
-    T t(sz);
+    T t;
+    t.resize(sz);
 
     is.read(std::data(t), sz * sizeof(typename T::value_type));
 
     return t;
 }
+
 } //namespace todolist::serialization
