@@ -37,10 +37,13 @@ struct Task
         {
             serialization::deserialize<std::string>(is),
             serialization::deserialize<std::string>(is),
-            static_cast<std::uint64_t>(
-                    serialization::deserialize<net_uint64>(is)),
+            static_cast<std::time_t>(
+                static_cast<std::uint64_t>(
+                    serialization::deserialize<net_uint64>(is))),
             serialization::deserialize<std::string>(is),
-            static_cast<std::uint8_t>(serialization::deserialize<net_uint8>(is))
+            static_cast<bool>(
+                static_cast<std::uint8_t>(
+                    serialization::deserialize<net_uint8>(is)))
         };
     }
 };
