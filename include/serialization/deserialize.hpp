@@ -33,8 +33,9 @@ std::enable_if_t<
 template<typename T>
 inline 
 std::enable_if_t<
-    !traits::is_deserializable_v<T>                 &&
-    !std::is_trivially_copyable_v<T>                &&
+    !traits::is_deserializable_v<T>                          &&
+    !std::is_trivially_copyable_v<T>                         &&
+    traits::has_value_type_v<T>                              &&
     !traits::has_value_type_v<T, std::is_trivially_copyable> &&
     traits::is_range_constructible_v<T>, T> deserialize(std::istream& is)
 {
@@ -50,10 +51,11 @@ std::enable_if_t<
 template<typename T>
 inline 
 std::enable_if_t<
-    !traits::is_deserializable_v<T>                &&
-    !std::is_trivially_copyable_v<T>               &&
-    std::is_default_constructible_v<T>             &&
-    traits::is_resizable_v<T>                      &&
+    !traits::is_deserializable_v<T>                         &&
+    !std::is_trivially_copyable_v<T>                        &&
+    std::is_default_constructible_v<T>                      &&
+    traits::is_resizable_v<T>                               &&
+    traits::has_value_type_v<T>                             &&
     traits::has_value_type_v<T, std::is_trivially_copyable> &&
     traits::has_data_v<T>, T> deserialize(std::istream& is)
 {

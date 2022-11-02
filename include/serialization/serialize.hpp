@@ -45,6 +45,7 @@ inline
 std::enable_if_t<
     !traits::is_serializable_v<T>                           &&
     !std::is_trivially_copyable_v<T>                        &&
+    traits::has_value_type_v<T>                             &&
     traits::has_value_type_v<T, std::is_trivially_copyable> &&
     !traits::has_value_type_v<T, traits::is_serializable>   &&
     traits::has_size_v<T>                                   &&
