@@ -11,3 +11,4 @@
 #include "is_serializable.hpp"
 #include "is_variant.hpp"
 #include "is_range_constructible.hpp"
+#include "is_resizable.hpp"
