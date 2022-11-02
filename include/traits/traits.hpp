@@ -3,7 +3,7 @@
 #include "has_begin_end.hpp"
 #include "has_data.hpp"
 #include "has_size.hpp"
-#include "has_trivially_copyable_value_type.hpp"
+#include "has_value_type.hpp"
 #include "is_deserializable.hpp"
 #include "is_matchable.hpp"
 #include "is_named.hpp"
