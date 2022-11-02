@@ -12,3 +12,5 @@
 #include "is_variant.hpp"
 #include "is_range_constructible.hpp"
 #include "is_resizable.hpp"
+#include "is_pair.hpp"
+#include "is_tuple_like.hpp"
