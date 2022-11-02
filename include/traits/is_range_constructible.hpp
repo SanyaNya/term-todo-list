@@ -44,13 +44,11 @@ struct dumb_iterator
     }
 };
 
-} //namespace detail
-
 template<typename T, typename = void>
-struct is_range_constructible : std::false_type {};
+struct is_range_constructible_h : std::false_type {};
 
 template<typename T>
-struct is_range_constructible<
+struct is_range_constructible_h<
     T, std::void_t<
         typename T::value_type, 
         decltype(T
@@ -59,6 +57,11 @@ struct is_range_constructible<
                 std::declval<detail::dumb_iterator<T>>()
                 })>> : 
             std::true_type {};
+
+} //namespace detail
+
+template<typename T>
+struct is_range_constructible : detail::is_range_constructible_h<T> {};
 
 template<typename T>
 constexpr bool is_range_constructible_v = 
