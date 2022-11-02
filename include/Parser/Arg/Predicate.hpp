@@ -12,6 +12,7 @@ struct Predicate
 
     Tokenizer::Tokens::ReferenceKeyword ref;
     std::variant<Tokenizer::Tokens::Compare, Tokenizer::Tokens::Klike> cmp;
+    std::optional<Tokenizer::Tokens::Dequal> eqopt;
     Tokenizer::Token value;
 
     template<typename It>
@@ -21,12 +22,14 @@ struct Predicate
         using Space = Tokenizer::Tokens::Dspace;
         using Cmp = Tokenizer::Tokens::Compare;
         using Like = Tokenizer::Tokens::Klike;
+        using Equal = Tokenizer::Tokens::Dequal;
         using Token = Tokenizer::Token;
         It initial_begin = begin;
 
         std::optional<Ref> refopt;
         std::optional<Space> ls;
         std::optional<Cmp> cmpopt;
+        std::optional<Equal> eqopt;
         std::optional<Space> rs;
         std::optional<Like> likeopt;
         std::optional<Token> vopt;
@@ -63,6 +66,14 @@ struct Predicate
             begin = initial_begin;
             return std::nullopt;
         }
+
+        eqopt = Parser::parse_arg<Equal>(begin, end);
+
+        if(begin == end)
+        {
+            begin = initial_begin;
+            return std::nullopt;
+        }
         rs = Parser::parse_arg<Space>(begin, end);
 
         if(likeopt && (!ls || !rs))
@@ -82,7 +93,8 @@ struct Predicate
             refopt.value(), 
             (cmpopt ? 
              decltype(cmp){cmpopt.value()} : 
-             decltype(cmp){likeopt.value()}), 
+             decltype(cmp){likeopt.value()}),
+            eqopt,
             vopt.value()
         };
     }
