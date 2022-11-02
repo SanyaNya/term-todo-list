@@ -18,7 +18,7 @@ struct dumb_iterator
     using reference = value_type&;
     using difference_type = int;
 
-    bool operator!=(dumb_iterator it) const noexcept
+    bool operator!=(dumb_iterator) const noexcept
     {
         return true;
     }
