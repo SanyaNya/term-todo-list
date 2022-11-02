@@ -28,7 +28,7 @@ public:
     ~file_resource()
     {
         std::ofstream os(
-            Location::path, std::ios::in | std::ios::binary);
+            Location::path, std::ios::out | std::ios::binary);
         value.serialize(os);
     }
 };
