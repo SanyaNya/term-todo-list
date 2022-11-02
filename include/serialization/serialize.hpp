@@ -27,10 +27,11 @@ serialize(std::ostream& os, const T& t)
 template<typename T>
 inline
 std::enable_if_t<
-    !traits::is_serializable_v<T>                   &&
-    !std::is_trivially_copyable_v<T>                &&
-    !traits::has_trivially_copyable_value_type_v<T> &&
-    traits::has_size_v<T>                           &&
+    !traits::is_serializable_v<T>                            &&
+    !std::is_trivially_copyable_v<T>                         &&
+    !traits::has_value_type_v<T, std::is_trivially_copyable> &&
+    traits::has_value_type_v<T, traits::is_serializable>     &&
+    traits::has_size_v<T>                                    &&
     traits::has_begin_end_v<T>>
 serialize(std::ostream& os, const T& t)
 {
@@ -42,10 +43,11 @@ serialize(std::ostream& os, const T& t)
 template<typename T>
 inline
 std::enable_if_t<
-    !traits::is_serializable_v<T>                  &&
-    !std::is_trivially_copyable_v<T>               &&
-    traits::has_trivially_copyable_value_type_v<T> &&
-    traits::has_size_v<T>                          &&
+    !traits::is_serializable_v<T>                           &&
+    !std::is_trivially_copyable_v<T>                        &&
+    traits::has_value_type_v<T, std::is_trivially_copyable> &&
+    !traits::has_value_type_v<T, traits::is_serializable>   &&
+    traits::has_size_v<T>                                   &&
     traits::has_data_v<T>>
 serialize(std::ostream& os, const T& t)
 {
