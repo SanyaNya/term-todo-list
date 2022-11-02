@@ -63,7 +63,9 @@ std::enable_if_t<
     T t;
     t.resize(sz);
 
-    is.read(std::data(t), sz * sizeof(typename T::value_type));
+    is.read(
+        std::data(t), 
+        static_cast<std::streamsize>(sz * sizeof(typename T::value_type)));
 
     return t;
 }
