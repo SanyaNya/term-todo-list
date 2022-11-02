@@ -62,7 +62,6 @@ inline void serialize(std::ostream& os, const T& t)
             }
             else if constexpr(traits::is_tuple_like_v<T>)
             {
-                serialize(os, net_uint64(std::tuple_size_v<T>));
                 detail::expand_serialize(
                     os, t, 
                     std::make_index_sequence<std::tuple_size_v<T>>{});
