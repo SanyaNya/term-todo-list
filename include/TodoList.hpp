@@ -36,6 +36,16 @@ public:
         return tasks.erase(name);
     }
 
+    Task& at(const std::string& name)
+    {
+        return tasks.at(name);
+    }
+
+    const Task& at(const std::string& name) const
+    {
+        return tasks.at(name);
+    }
+
     auto begin() noexcept { return tasks.begin(); }
     auto begin() const noexcept { return tasks.begin(); }
     auto cbegin() const noexcept { return tasks.cbegin(); }
