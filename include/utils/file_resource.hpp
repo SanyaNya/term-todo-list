@@ -3,6 +3,7 @@
 #include <utility>
 #include <type_traits>
 #include <fstream>
+#include <filesystem>
 
 namespace todolist::utils
 {
@@ -16,7 +17,11 @@ class file_resource
     {
         std::ifstream is(
             Location::path, std::ios::in | std::ios::binary);
-        return T::deserialize(is);
+
+        if(is.is_open() && std::filesystem::file_size(Location::path) != 0)
+            return T::deserialize(is);
+        
+        return T{};
     }
 
 public:
