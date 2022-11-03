@@ -94,8 +94,8 @@ struct Date
             return std::nullopt;
         }
 
-        t.tm_year = static_cast<int>(year.value().value);
-        t.tm_mon  = static_cast<int>(month.value().value);
+        t.tm_year = static_cast<int>(year.value().value - 1900);
+        t.tm_mon  = static_cast<int>(month.value().value - 1);
         t.tm_mday = static_cast<int>(day.value().value);
         t.tm_hour = static_cast<int>(hours.value().value);
         t.tm_min  = static_cast<int>(minutes.value().value);

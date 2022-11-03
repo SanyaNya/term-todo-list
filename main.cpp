@@ -151,7 +151,9 @@ struct SelectCmd
         std::cout 
             << "Name: "        << task.name        << "\n"
             << "Description: " << task.description << "\n"
-            << "Date: "        << task.date        << "\n"
+            << "Date: "        
+            << std::put_time(std::localtime(&task.date), "%Y-%m-%d %H:%M") 
+            << "\n"
             << "Category: "    << task.category    << "\n"
             << "Status: "      << task.status      << "\n\n";
     }
