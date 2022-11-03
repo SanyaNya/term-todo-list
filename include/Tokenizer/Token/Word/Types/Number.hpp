@@ -12,6 +12,7 @@ struct Number
     static constexpr std::string_view token_name = "number";
 
     unsigned value;
+    std::string_view word;
 
     static std::optional<Number> match(std::string_view word) noexcept
     {
@@ -20,7 +21,7 @@ struct Number
             std::from_chars(word.begin(), word.end(), val);
 
         if(ptr == word.end()) 
-            return Number{val};
+            return Number{val, word};
         
         return std::nullopt;
     }
