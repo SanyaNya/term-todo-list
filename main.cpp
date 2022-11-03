@@ -95,18 +95,28 @@ struct UpdateCmd
 
     void execute()
     {
-        Task& task = todo.get().at(std::string(std::get<1>(args).value));
+        try
+        {
+            Task& task = todo.get().at(std::string(std::get<1>(args).value));
+            
+            task.description = 
+                read_arg<Parser::LongString>("Description: ");
+
+            task.date = 
+                read_arg<Parser::Date>("Date: ");
+
+            task.category = 
+                read_arg<
+                    Tokenizer::Tokens::String, std::string>("Category: ");
+
+            std::cout << "Task \"" << task.name << "\" updated\n";
+        }
+        catch(const std::out_of_range& e)
+        {
+            std::cout 
+                << "Task \"" << std::get<1>(args).value << "\" not found\n";
+        }
         
-        task.description = 
-            read_arg<Parser::LongString>("Description: ");
-
-        task.date = 
-            read_arg<Parser::Date>("Date: ");
-
-        task.category = 
-            read_arg<Tokenizer::Tokens::String, std::string>("Category: ");
-
-        std::cout << "Task \"" << task.name << "\" updated\n";
     }
 };
 
