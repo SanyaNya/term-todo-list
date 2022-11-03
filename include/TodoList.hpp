@@ -18,7 +18,7 @@ public:
 
     void add(Task&& task)
     {
-        tasks.emplace(task.name, std::move(task));
+        tasks[task.name] = std::move(task);
     }
 
     void done(const std::string& name)
