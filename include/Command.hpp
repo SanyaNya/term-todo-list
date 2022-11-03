@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Parser/Arg/Arg.hpp"
+#include "Parser/read.hpp"
 #include "utils/file_resource.hpp"
 #include "TodoList.hpp"
 
@@ -60,29 +61,6 @@ struct DoneCmd
     }
 };
 
-template<typename T, typename R = decltype(T::value)>
-static R read_arg(const char* invocation)
-{
-    std::string buf;
-
-    std::cout << invocation;
-    std::getline(std::cin, buf);
-
-    const char* const bufcstr = buf.c_str();
-    
-    Tokenizer::Iterator begin(
-            utils::ArgvIterator(&bufcstr, 1));
-    Tokenizer::Iterator end(
-            utils::ArgvIterator(&bufcstr, 1, utils::null_sentinel{}));
-
-    std::optional<T> opt = Parser::parse_arg<T>(begin, end);
-
-    if(opt)
-        return R{opt.value().value};
-    else 
-        throw Parser::unexpected_token<Parser::LongString>();
-}
-
 struct UpdateCmd
 {
     static constexpr std::string_view name = "update";
@@ -95,13 +73,13 @@ struct UpdateCmd
             Task& task = todo.get().at(std::string(std::get<1>(args).value));
             
             task.description = 
-                read_arg<Parser::LongString>("Description: ");
+                Parser::read_arg<Parser::LongString>("Description: ");
 
             task.date = 
-                read_arg<Parser::Date>("Date: ");
+                Parser::read_arg<Parser::Date>("Date: ");
 
             task.category = 
-                read_arg<
+                Parser::read_arg<
                     Tokenizer::Tokens::String, std::string>("Category: ");
 
             std::cout << "Task \"" << task.name << "\" updated\n";
