@@ -7,6 +7,7 @@
 #include "Parser/Arg/Predicate.hpp"
 #include "utils/file_resource.hpp"
 #include "TodoList.hpp"
+#include <functional>
 
 namespace todolist
 {
@@ -98,12 +99,43 @@ struct SelectCmd
             Parser::Tuple<
                 Dspace, Kwhere, 
                 Dspace, Parser::VarArray<
-                            Parser::Predicate, 
+                            Parser::Predicate<Task>, 
                             Parser::Tuple<Dspace, Kand, Dspace>>>>> args;
+
+    static void print(const Task& task)
+    {
+        std::cout 
+            << "Name: "        << task.name        << "\n"
+            << "Description: " << task.description << "\n"
+            << "Date: "        << task.date        << "\n"
+            << "Category: "    << task.category    << "\n"
+            << "Status: "      << task.status      << "\n\n";
+    }
 
     void execute()
     {
-        //TODO
+        if(!std::get<2>(args).value)
+        {
+            for(const auto&[name, task] : todo.get())
+                print(task);
+        }
+        else
+        {
+            const auto& arr = 
+                std::get<3>(std::get<2>(args).value.value().value).array;
+
+            auto array_predicate = [&arr](const Task& t)
+            {
+                for(const auto& p : arr)
+                    if(!p.value(t)) return false;
+
+                return true;
+            };
+
+            for(const auto&[name, task] : todo.get())
+                if(array_predicate(task))
+                    print(task);
+        }
     }
 };
 

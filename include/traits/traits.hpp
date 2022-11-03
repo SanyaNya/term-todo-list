@@ -14,3 +14,8 @@
 #include "is_resizable.hpp"
 #include "is_pair.hpp"
 #include "is_tuple_like.hpp"
+#include "is_less_valid.hpp"
+#include "is_greater_valid.hpp"
+#include "is_less_or_equal_valid.hpp"
+#include "is_greater_or_equal_valid.hpp"
+#include "is_equals_valid.hpp"
