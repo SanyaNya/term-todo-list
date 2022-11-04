@@ -46,15 +46,15 @@ template<typename Arg>
 struct parse_arg_exc
 {
     template<typename It>
-    static Arg f(It& begin, It end)
+    static void f(Arg& arg, It& begin, It end)
     {
         if(begin == end) 
             throw unexpected_end_of_tokens();
 
         if(auto opt = parse_arg<Arg>(begin, end)) 
-            return opt.value();
-
-        throw unexpected_token<Arg>();
+            arg = opt.value();
+        else
+            throw unexpected_token<Arg>();
     }
 };
 
@@ -62,19 +62,22 @@ template<typename T>
 struct parse_arg_exc<Optional<T>>
 {
     template<typename It>
-    static Optional<T> f(It& begin, It end)
+    static void f(Optional<T>& arg, It& begin, It end)
     {
-        if(begin == end) return Optional<T>{ std::nullopt };
-
-        return parse_arg<Optional<T>>(begin, end).value();
+        if(begin == end) 
+            arg = Optional<T>{ std::nullopt };
+        else
+            arg = parse_arg<Optional<T>>(begin, end).value();
     }
 };
 
 template<typename Args, typename It, std::size_t ... Is>
 inline Args parse_args(It& begin, It end, std::index_sequence<Is...>)
 {
-    return Args{
-        parse_arg_exc<std::tuple_element_t<Is, Args>>::f(begin, end)...};
+    Args args;
+    ((parse_arg_exc<std::tuple_element_t<Is, Args>>::f(std::get<Is>(args), begin, end)), ...);
+
+    return args;
 }
 
 } //namespace detail
