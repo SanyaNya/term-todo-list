@@ -24,10 +24,10 @@ struct AddCmd
     static constexpr std::string_view usage = "add NAME DESCRIPTION DATE CATEGORY";
     static constexpr std::string_view info = "Add new task";
     std::tuple<
-        Dspace, String, 
-        Dspace, Parser::LongString, 
-        Dspace, Parser::Date,
-        Dspace, String> args;
+        Empty, String, 
+        Empty, Parser::LongString, 
+        Empty, Parser::Date,
+        Empty, String> args;
 
     void execute()
     {
@@ -49,7 +49,7 @@ struct DoneCmd
     static constexpr std::string_view name = "done";
     static constexpr std::string_view usage = "done NAME";
     static constexpr std::string_view info = "Complete the task";
-    std::tuple<Dspace, String> args;
+    std::tuple<Empty, String> args;
 
     void execute()
     {
@@ -70,7 +70,7 @@ struct UpdateCmd
     static constexpr std::string_view name = "update";
     static constexpr std::string_view usage = "update NAME";
     static constexpr std::string_view info = "Update the task";
-    std::tuple<Dspace, String> args;
+    std::tuple<Empty, String> args;
 
     void execute()
     {
@@ -104,7 +104,7 @@ struct DeleteCmd
     static constexpr std::string_view name = "delete";
     static constexpr std::string_view usage = "delete NAME";
     static constexpr std::string_view info = "Delete the task";
-    std::tuple<Dspace, String> args;
+    std::tuple<Empty, String> args;
 
     void execute()
     {
@@ -121,13 +121,13 @@ struct SelectCmd
     static constexpr std::string_view usage = "select * [where [name, description, date, category, status] [<, <=, =, >, >=, like] [STRING, NUMBER, DATE, DESCRIPTION, off, on] ]";
     static constexpr std::string_view info = "Print all tasks with optional filter";
     std::tuple<
-        Dspace, Dstar, 
+        Empty, Dstar, 
         Parser::Optional<
             Parser::Tuple<
-                Dspace, Kwhere, 
-                Dspace, Parser::VarArray<
+                Empty, Kwhere, 
+                Empty, Parser::VarArray<
                             Parser::Predicate<Task>, 
-                            Parser::Tuple<Dspace, Kand, Dspace>>>>> args;
+                            Parser::Tuple<Empty, Kand, Dspace>>>>> args;
 
     static void print(const Task& task)
     {
