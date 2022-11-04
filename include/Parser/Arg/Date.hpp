@@ -99,6 +99,7 @@ struct Date
         t.tm_mday = static_cast<int>(day.value().value);
         t.tm_hour = static_cast<int>(hours.value().value);
         t.tm_min  = static_cast<int>(minutes.value().value);
+        t.tm_isdst = 0;
 
         date.value = std::mktime(&t);
 
