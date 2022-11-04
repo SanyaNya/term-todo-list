@@ -28,6 +28,14 @@ class CLI
     template<size_t ... Is>
     static void print_help(std::index_sequence<Is...>)
     {
+        std::cout << "Note: don't forget use \\ for shell special symbol(e.g. *, <, >, \", ')\n";
+        std::cout << "Formats:\n";
+        std::cout << "Name        - word\n";
+        std::cout << "Description - \"many words\"\n";
+        std::cout << "Date        - \"year-month-day hours:minutes\"\n";
+        std::cout << "Category    - word\n";
+        std::cout << "Status      - off, on\n\n";
+
         (print_help<std::variant_alternative_t<Is, Command>>(), ...);
     }
 

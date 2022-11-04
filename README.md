@@ -13,3 +13,10 @@ Windows:
  * cmake --install build
 
 ## Note: don't forget use \\ for shell special symbol(e.g. *, <, >, ")
+
+## Formats:
+ * Name - word
+ * Description - "many words"
+ * Date - "year-month-day hours:minutes"
+ * Category - word
+ * Status - off, on
