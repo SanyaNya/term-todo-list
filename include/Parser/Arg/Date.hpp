@@ -101,7 +101,21 @@ struct Date
         t.tm_min  = static_cast<int>(minutes.value().value);
         t.tm_isdst = 0;
 
+        std::tm tmc = t;
+
         date.value = std::mktime(&t);
+
+        if(
+            date.value == static_cast<std::time_t>(-1) || 
+            tmc.tm_year != t.tm_year || 
+            tmc.tm_mon != t.tm_mon   || 
+            tmc.tm_mday != t.tm_mday || 
+            tmc.tm_hour != t.tm_hour || 
+            tmc.tm_min != t.tm_min)
+        {
+            begin = initial_begin;
+            return std::nullopt;
+        }
 
         return date;
     }
