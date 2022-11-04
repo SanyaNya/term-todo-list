@@ -15,6 +15,7 @@ if(MSVC)
         $<$<CONFIG:RELEASE>:/O2>)
 else()
     add_compile_options(
+        -pedantic
         -Wall
         -Wextra
         -Wconversion
