@@ -28,13 +28,17 @@ class CLI
     template<size_t ... Is>
     static void print_help(std::index_sequence<Is...>)
     {
-        std::cout << "Note: don't forget use \\ for shell special symbol(e.g. *, <, >, \", ')\n";
+        std::cout << "Note: don't forget use \\ for shell special symbol(e.g. *, <, >, \", ')\n\n";
         std::cout << "Formats:\n";
         std::cout << "Name        - word\n";
         std::cout << "Description - \"many words\"\n";
         std::cout << "Date        - \"year-month-day hours:minutes\"\n";
         std::cout << "Category    - word\n";
         std::cout << "Status      - off, on\n\n";
+
+        std::cout << "Examples:\n";
+        std::cout << "todo-list add task1 \\\"long description\\\" \\\"2022-11-04 22:00\\\" my_category\n";
+        std::cout << "todo-list select \\* where date \\< \\\"2020-12-12 00:00\\\" and category=cat1 and status=on and description like \\\"text\\\"\n\n";
 
         (print_help<std::variant_alternative_t<Is, Command>>(), ...);
     }
