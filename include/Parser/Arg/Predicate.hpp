@@ -32,30 +32,50 @@ inline const auto& get_ref(const T& t)
 template<typename T1, typename T2>
 inline bool less(const T1& t1, const T2& t2)
 {
+    if constexpr(
+        std::is_same_v<T1, std::time_t> && std::is_same_v<T2, std::time_t>)
+            return std::difftime(t1, t2) < 0.0;
+
     return t1 < t2;
 }
 
 template<typename T1, typename T2>
 inline bool less_or_equal(const T1& t1, const T2& t2)
 {
+    if constexpr(
+        std::is_same_v<T1, std::time_t> && std::is_same_v<T2, std::time_t>)
+            return std::difftime(t1, t2) <= 0.0;
+
     return t1 <= t2;
 }
 
 template<typename T1, typename T2>
 inline bool greater(const T1& t1, const T2& t2)
 {
+    if constexpr(
+        std::is_same_v<T1, std::time_t> && std::is_same_v<T2, std::time_t>)
+            return std::difftime(t1, t2) > 0.0;
+
     return t1 > t2;
 }
 
 template<typename T1, typename T2>
 inline bool greater_or_equal(const T1& t1, const T2& t2)
 {
+    if constexpr(
+        std::is_same_v<T1, std::time_t> && std::is_same_v<T2, std::time_t>)
+            return std::difftime(t1, t2) >= 0.0;
+
     return t1 >= t2;
 }
 
 template<typename T1, typename T2>
 inline bool equals(const T1& t1, const T2& t2)
 {
+    if constexpr(
+        std::is_same_v<T1, std::time_t> && std::is_same_v<T2, std::time_t>)
+            return std::difftime(t1, t2) == 0.0;
+
     return t1 == t2;
 }
 
@@ -75,7 +95,7 @@ inline auto get_cmp(Tokenizer::Tokens::Compare c, bool eq)
         {
             using C = decltype(t);
 
-            if(eq)
+            if(!eq)
             {
                 if constexpr(
                         std::is_same_v<C, Dless> &&
@@ -144,7 +164,7 @@ struct Predicate
         std::optional<String> stropt;
         std::optional<Number> numopt;
         std::optional<Bool> boolopt;
-        std::optional<LongString> longstropt;
+        std::optional<LongString> lstropt;
         std::optional<Date> dateopt;
 
         if(begin == end || !(refopt = Parser::parse_arg<ReferenceKeyword>(begin, end)))
@@ -195,11 +215,11 @@ struct Predicate
         }
 
         if(begin == end || 
-           !((stropt     = Parser::parse_arg<String>(begin, end))     ||
-             (numopt     = Parser::parse_arg<Number>(begin, end))     ||
-             (boolopt    = Parser::parse_arg<Bool>(begin, end))       ||
-             (longstropt = Parser::parse_arg<LongString>(begin, end)) ||
-             (dateopt    = Parser::parse_arg<Date>(begin, end))))
+           !((stropt  = Parser::parse_arg<String>(begin, end))     ||
+             (numopt  = Parser::parse_arg<Number>(begin, end))     ||
+             (boolopt = Parser::parse_arg<Bool>(begin, end))       ||
+             (dateopt = Parser::parse_arg<Date>(begin, end))       ||
+             (lstropt = Parser::parse_arg<LongString>(begin, end))))
         {
             begin = initial_begin;
             return std::nullopt;
@@ -210,12 +230,13 @@ struct Predicate
         else if(numopt)  val = numopt.value().word;
         else if(boolopt) val = static_cast<bool>(boolopt.value().index());
         else if(dateopt) val = dateopt.value().value;
+        else if(lstropt) val = lstropt.value().value;
 
         return Predicate{
             std::visit([cmpopt, eqopt](auto r, auto v)
             {
                 using R = decltype(r);
-                using V = decltype(v);
+                using V = std::decay_t<decltype(v)>;
                 using RT =
                     std::decay_t<
                         std::invoke_result_t<
