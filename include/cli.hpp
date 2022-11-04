@@ -36,7 +36,7 @@ public:
         begin(utils::ArgvIterator(argv, argc)),
         end(utils::ArgvIterator(argv, argc, utils::null_sentinel{})) {}
 
-    auto parse_and_exec()
+    void parse_and_exec()
     {
         using Tokenizer::Tokens::String;
 
@@ -83,12 +83,11 @@ public:
         if(!optcmd) 
             throw Parser::cmd_not_found{std::string(w.begin(), w.end())};
 
-        return 
-            std::visit([&](auto t)
-            { 
-                auto cmd = Parser::parse<decltype(t)>(begin, end);
-                cmd.execute();
-            }, optcmd.value());
+        std::visit([&](auto t)
+        { 
+            auto cmd = Parser::parse<decltype(t)>(begin, end);
+            cmd.execute();
+        }, optcmd.value());
     }
 };
 
