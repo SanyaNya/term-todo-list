@@ -95,6 +95,10 @@ struct UpdateCmd
             std::cout 
                 << "Task \"" << std::get<1>(args).value << "\" not found\n";
         }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << std::endl;
+        }
         
     }
 };

@@ -16,6 +16,13 @@ inline R read_arg(const char* invocation)
     std::cout << invocation;
     std::getline(std::cin, buf);
 
+    for(size_t i = 0; ; ++i)
+    {
+        if(buf[i] == '\0') break;
+        if(buf[i] == '\\') buf.erase(i, 1);
+        if(buf[i] == '\0') break;
+    }
+
     const char* const bufcstr = buf.c_str();
     
     Tokenizer::Iterator begin(
@@ -28,7 +35,7 @@ inline R read_arg(const char* invocation)
     if(opt)
         return R{opt.value().value};
     else 
-        throw Parser::unexpected_token<Parser::LongString>();
+        throw Parser::unexpected_token<T>();
 }
 
 } //namespace todolist::Parser
