@@ -11,3 +11,5 @@ Windows:
  * cmake -S . -B build
  * cmake --build build --config [Debug, Release]
  * cmake --install build
+
+##Note: don't forget use '\' for shell special symbol(e.g. *, <, >, ")
