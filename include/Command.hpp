@@ -55,13 +55,18 @@ struct DoneCmd
     {
         try
         {
-            todo.get().done(to_string(std::get<1>(args).value));
+            auto name = std::get<1>(args).value;
+            
+            todo.get().done(to_string(name));
+
+            std::cout << "\"" << name << "\"" << " complete\n";
         }
         catch(const std::out_of_range& e)
         {
             std::cout 
                 << "Task \"" << std::get<1>(args).value << "\" not found\n";
         }
+
     }
 };
 
