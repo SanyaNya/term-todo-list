@@ -24,11 +24,13 @@ else()
         $<$<CONFIG:DEBUG>:-g3>
         $<$<CONFIG:DEBUG>:-fsanitize=address>
         $<$<CONFIG:DEBUG>:-fsanitize=undefined>
-        $<$<CONFIG:RELEASE>:-O3>)
+        $<$<CONFIG:RELEASE>:-O3>
+        $<$<CONFIG:RELEASE>:-flto>)
 
     add_link_options(
         $<$<CONFIG:DEBUG>:-fsanitize=address>
-        $<$<CONFIG:DEBUG>:-fsanitize=undefined>)
+        $<$<CONFIG:DEBUG>:-fsanitize=undefined>
+        $<$<CONFIG:RELEASE>:-flto>)
 endif()
 
 add_executable(${PROJECT_NAME} main.cpp)
