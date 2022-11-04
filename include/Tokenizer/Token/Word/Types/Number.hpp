@@ -18,9 +18,9 @@ struct Number
     {
         unsigned val;
         const auto [ptr, err] = 
-            std::from_chars(word.begin(), word.end(), val);
+            std::from_chars(word.data(), word.data() + word.size(), val);
 
-        if(ptr == word.end()) 
+        if(ptr == (word.data() + word.size())) 
             return Number{val, word};
         
         return std::nullopt;
