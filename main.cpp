@@ -6,8 +6,7 @@ int main(int argc, const char* const argv[])
     todolist::CLI<todolist::Command> cli(++argv, --argc);
     try
     {
-        auto cmdv = cli.parse();
-        cli.execute(cmdv);
+        cli.parse_and_exec();
     }
     catch(const std::exception& e)
     {

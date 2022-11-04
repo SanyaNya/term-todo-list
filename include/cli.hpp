@@ -18,22 +18,65 @@ class CLI
     iterator begin;
     iterator end;
 
+    template<typename T>
+    static void print_help()
+    {
+        std::cout << T::name << " info: " << T::info << "\n";
+        std::cout << T::name << " usage: " << T::usage << "\n\n";
+    }
+
+    template<size_t ... Is>
+    static void print_help(std::index_sequence<Is...>)
+    {
+        (print_help<std::variant_alternative_t<Is, Command>>(), ...);
+    }
+
 public:
     CLI(const char* const* argv, int argc) : 
         begin(utils::ArgvIterator(argv, argc)),
         end(utils::ArgvIterator(argv, argc, utils::null_sentinel{})) {}
 
-    auto parse()
+    auto parse_and_exec()
     {
         using Tokenizer::Tokens::String;
 
         if(begin == end)
-            throw Parser::unexpected_end_of_tokens();
+        {
+            std::cout << "Use help [NAME]\n";
+            return;
+        }
 
         if(!utils::dfs_holds_alternative<String>(*begin))
             throw Parser::unexpected_token<String>();
 
         const auto w = utils::dfs_get<String>(*begin++).value;
+
+        if(w == "help")
+        {
+            if(begin != end)
+            {
+                ++begin;
+                const auto cmdw = utils::dfs_get<String>(*begin++).value;
+                const auto optcmd = Tokenizer::match<Command>(cmdw);
+
+                if(!optcmd) 
+                    throw Parser::cmd_not_found{
+                            std::string(w.begin(), w.end())};
+
+                std::visit([](auto t)
+                {
+                    print_help<decltype(t)>();
+                }, optcmd.value());
+            }
+            else
+            {
+                print_help(
+                    std::make_index_sequence<
+                        std::variant_size_v<Command>>{});
+            }
+
+            return;
+        }
 
         const auto optcmd = Tokenizer::match<Command>(w);
 
@@ -43,13 +86,9 @@ public:
         return 
             std::visit([&](auto t)
             { 
-                return Command{Parser::parse<decltype(t)>(begin, end)}; 
+                auto cmd = Parser::parse<decltype(t)>(begin, end);
+                cmd.execute();
             }, optcmd.value());
-    }
-
-    static void execute(Command& cmd)
-    {
-        std::visit([](auto t){ t.execute(); }, cmd);
     }
 };
 
