@@ -11,7 +11,6 @@ if(MSVC)
     add_compile_options(
         $<$<CONFIG:DEBUG>:/Od>
         $<$<CONFIG:DEBUG>:/Zi>
-        $<$<CONFIG:DEBUG>:/fsanitize>
         $<$<CONFIG:RELEASE>:/O2>)
 else()
     add_compile_options(
