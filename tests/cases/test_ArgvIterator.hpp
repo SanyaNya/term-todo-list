@@ -1,7 +1,7 @@
 TEST("ArgvIterator",
     SUBTEST("Empty args", []()
     {
-        const char* argv[]{};
+        const char* const* argv = nullptr;
         int argc = 0;
 
         using namespace todolist::utils;
