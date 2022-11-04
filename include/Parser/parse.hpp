@@ -84,10 +84,16 @@ inline Command parse(It& begin, It end)
 {
     using Tuple = decltype(std::declval<Command>().args);
 
-    return Command{
+    Command cmd = 
+        Command{
             detail::parse_args<Tuple>(
                 begin, end, 
                 std::make_index_sequence<std::tuple_size_v<Tuple>>{})};
+
+    if(begin != end)
+        throw unexpected_tokens_after_command();
+
+    return cmd;
 }
 
 } //namespace todolist::Parser
